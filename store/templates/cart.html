@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Cart{% endblock %}
+
+{% block body %}
+	<!-- ================ start banner area ================= -->	
+	<section class="blog-banner-area" id="category">
+		<div class="container h-100">
+			<div class="blog-banner">
+				<div class="text-center">
+					<h1>Shopping Cart</h1>
+					<nav aria-label="breadcrumb" class="banner-breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
+            </ol>
+          </nav>
+				</div>
+			</div>
+    </div>
+	</section>
+	<!-- ================ end banner area ================= -->
+
+    <!--================Cart Area =================-->
+    <section class="cart_area">
+        <div class="container">
+            <div class="cart_inner">
+                <div class="table-responsive">
+                    {% if order != None and details|length > 0 %}
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Product</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Total</th>
+                                    <th scope="col">Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for detail in details %}
+                                <tr>
+                                    <td>
+                                        <div class="media">
+                                            <div class="d-flex">
+                                                <img src="{{ detail.item.image.url }}" width="70" alt="">
+                                            </div>
+                                            <div class="media-body">
+                                                <p>{{ detail.item.title }}</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <h5>${{ detail.item.price }}</h5>
+                                    </td>
+                                    <td>
+                                        <div class="product_count">
+                                            <input type="text" name="qty" id="sst" maxlength="12" disabled value="{{ detail.count }}" title="Quantity:"
+                                                class="input-text qty">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <h5>${{ detail.get_total_price }}</h5>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'store:remove-orderdetail' detail.id %}" class="btn text-dark btn-close">X</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <div class="alert alert-warning text-center">You are not order item in Cart</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--================End Cart Area =================-->
+
+{% endblock %}
