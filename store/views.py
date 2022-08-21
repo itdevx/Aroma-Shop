@@ -1,10 +1,9 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import View, DetailView, ListView, TemplateView, DeleteView
+from django.views.generic import View, ListView
 from store.models import OrderDetail
 from store.models import Order
 from store.models import Item as Product
-from django.utils import timezone
 from store import forms
 from django.contrib.auth.decorators import login_required
 
