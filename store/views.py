@@ -81,4 +81,13 @@ class ShopView(View):
 
 class CheckoutView(View):
     def get(self, request):
-        return render(request, 'checkout.html')
+        open_order: Order = Order.objects.filter(owner_id=request.user.id, is_paid=False).first()
+
+        if open_order.orderdetail_set.all() is None:
+            return redirect('store:cart')   
+        else:
+            c = {
+                'order': open_order.orderdetail_set.all()
+            }
+
+        return render(request, 'checkout.html', c)
