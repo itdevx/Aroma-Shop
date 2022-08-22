@@ -1,14 +1,9 @@
-from re import A
-from telnetlib import AYT
 from django.shortcuts import redirect, render
-from django.urls import clear_script_prefix, reverse_lazy
 from django.views.generic import View
 from django.views import generic
-from django.contrib.auth import login, logout, authenticate, get_user_model
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
 from account import forms
-
 
 
 class LoginView(View):
@@ -46,6 +41,17 @@ class LogoutView(View):
         return redirect('store:index')
 
 
+class RegisterView(generic.CreateView):
+    model = User
+    template_name = 'register.html'
+    form_class = forms.RegisterForm
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
+        return redirect('store:index')
+
+        
 # User = get_user_model()
 # class RegisterView(View):
 #     template_name = 'register.html'
@@ -74,14 +80,3 @@ class LogoutView(View):
 #                 return redirect('store:index')
 
 #         return render(self.request, self.template_name, {'form':form})
-
-
-class RegisterView(generic.CreateView):
-    model = User
-    template_name = 'register.html'
-    form_class = forms.RegisterForm
-
-    def form_valid(self, form):
-        user = form.save()
-        login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
-        return redirect('store:index')

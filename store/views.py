@@ -1,16 +1,10 @@
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse_lazy
 from django.views.generic import View, ListView
 from store.models import OrderDetail
 from store.models import Order
 from store.models import Item as Product
 from store import forms
 from django.contrib.auth.decorators import login_required
-
-from django.http import HttpResponse
-from django.shortcuts import redirect
-import requests
-import json
 
 
 class IndexView(ListView):
@@ -65,7 +59,6 @@ def remove_item_order(request, item_id):
     return redirect('store:cart')
 
 
-
 class CartView(View):
     def get(self, request):
         c = {
@@ -79,7 +72,6 @@ class CartView(View):
             c['details'] = open_order.orderdetail_set.all()
 
         return render(request, 'cart.html', c)
-
 
     
 class ShopView(View):
