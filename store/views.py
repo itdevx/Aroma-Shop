@@ -76,7 +76,13 @@ class CartView(View):
     
 class ShopView(View):
     def get(self, request):
-        return render(request, 'shop.html')
+        items = Product.objects.filter(active=True)
+
+        c = {
+            'items': items
+        }
+
+        return render(request, 'shop.html', c)
 
 
 class CheckoutView(View):
