@@ -7,6 +7,11 @@ from store.models import Item as Product
 from store import forms
 from django.contrib.auth.decorators import login_required
 
+from django.http import HttpResponse
+from django.shortcuts import redirect
+import requests
+import json
+
 
 class IndexView(ListView):
     template_name = 'index.html'
