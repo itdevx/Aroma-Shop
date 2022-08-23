@@ -7,10 +7,24 @@ from store import forms
 from django.contrib.auth.decorators import login_required
 
 
-class IndexView(ListView):
-    template_name = 'index.html'
-    queryset = Product.objects.filter(active=True)
-    context_object_name = 'products'
+class IndexView(View):
+    def get(self, request):
+        c = {
+            'details': None,
+            'products': Product.objects.filter(active=True)
+        }
+
+        open_order: Order = Order.objects.filter(owner_id=request.user.id, is_paid=False).first()
+        if open_order is not None:
+            c['details'] = open_order.orderdetail_set.all()
+
+        return render(request, 'index.html', c)
+
+
+# class IndexView(ListView):
+#     template_name = 'index.html'
+#     queryset = Product.objects.filter(active=True)
+#     context_object_name = 'products'
 
 
 class SingleProduct(View):
@@ -18,9 +32,15 @@ class SingleProduct(View):
     def get(self, request, slug, pk):
         product = get_object_or_404(Product, slug=slug, id=pk, active=True)
         c = {
+            'details': None,
             'product':product,
-            'new_order_form' : forms.UserNewOrderForm(request.POST or None, initial={'item_id':pk})
+            'new_order_form' : forms.UserNewOrderForm(request.POST or None, initial={'item_id':pk}),
         }
+
+        open_order: Order = Order.objects.filter(owner_id=request.user.id, is_paid=False).first()
+        if open_order is not None:
+            c['details'] = open_order.orderdetail_set.all()
+
         return render(request, self.template_name, c)
 
 
@@ -77,10 +97,14 @@ class CartView(View):
 class ShopView(View):
     def get(self, request):
         items = Product.objects.filter(active=True)
-
         c = {
+            'details': None,
             'items': items
         }
+
+        open_order: Order = Order.objects.filter(owner_id=request.user.id, is_paid=False).first()
+        if open_order is not None:
+            c['details'] = open_order.orderdetail_set.all()
 
         return render(request, 'shop.html', c)
 
@@ -88,12 +112,13 @@ class ShopView(View):
 class CheckoutView(View):
     def get(self, request):
         open_order: Order = Order.objects.filter(owner_id=request.user.id, is_paid=False).first()
+        c = {
+            'details': None,
+            'order': open_order.orderdetail_set.all()
+        }
 
-        if open_order.orderdetail_set.all() is None:
-            return redirect('store:cart')   
-        else:
-            c = {
-                'order': open_order.orderdetail_set.all()
-            }
+        open_order: Order = Order.objects.filter(owner_id=request.user.id, is_paid=False).first()
+        if open_order is not None:
+            c['details'] = open_order.orderdetail_set.all()
 
         return render(request, 'checkout.html', c)

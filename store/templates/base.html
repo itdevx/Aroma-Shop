@@ -49,11 +49,11 @@
                 </ul>
     
                 <ul class="nav-shop">
-                  <li class="nav-item"><button><a href="{% url 'store:cart' %}"><i class="ti-shopping-cart"></i></a><span class="nav-shop__circle">3</span></button></li>
                     {% if not request.user.is_authenticated %}
                         <li class="nav-item"><a class="button button-header" href="{% url 'account:login' %}">Login</a></li>
                     {% else %}
-                      <li class="nav-item"><a class="button button-header" href="{% url 'account:logout' %}">Logout</a></li>
+                        <li class="nav-item"><button><a href="{% url 'store:cart' %}"><i class="ti-shopping-cart"></i></a><span class="nav-shop__circle">{{ details.count }}</span></button></li>
+                        <li class="nav-item"><a class="button button-header" href="{% url 'account:logout' %}">Logout</a></li>
                     {% endif %}
                 </ul>
               </div>
