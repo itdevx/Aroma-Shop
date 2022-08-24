@@ -17,12 +17,17 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
+# views -> store
+from store import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('store.urls')),
     path('', include('account.urls')),
-    path('', include('blog.urls'))
+    path('', include('blog.urls')),
+
+    path('request/', views.send_request, name='request'),
+    path('verify/', views.verify , name='verify'),
 ]
 
 
