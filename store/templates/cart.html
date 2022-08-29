@@ -72,57 +72,28 @@
                                         {% endfor %}
                                     </tbody>
                                 </table>
-                                <a class="text-dark mx-2" href="{% url 'store:checkout' %}"><b>Go to checkout</b></a>
                             {% else %}
                                 <div class="alert alert-light text-danger text-center"><b>You have not item in order Cart</b></div>
                             {% endif %}
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="order_box">
-                        <h2>Your Order</h2>
-                        <ul class="list">
-                            <li><a href="#"><h4>Product Totals<span class="text-primary"><b>$ {{ total }}</b></span></h4></a></li>
-                            {% for o in orders %}
-                                <li><a href="#" style="font-size: 12px;">{{ o.item.title }}<span class="last text-success"><b>${{ o.get_total_price }}</b></span></a></li>
-                            {% endfor %}
-                        </ul>
-                        <!-- <ul class="list list_2">
-                            <li><a href="#">Subtotal <span>$2160.00</span></a></li>
-                            <li><a href="#">Shipping <span>Flat rate: $50.00</span></a></li>
-                            <li><a href="#">Total <span>$2210.00</span></a></li>
-                        </ul>
-                        <div class="payment_item">
-                            <div class="radion_btn">
-                                <input type="radio" id="f-option5" name="selector">
-                                <label for="f-option5">Check payments</label>
-                                <div class="check"></div>
+                {% if orders %}
+                    <div class="col-md-4">
+                        <div class="order_box">
+                            <h2>Your Order</h2>
+                            <ul class="list">
+                                <li><a href="#"><h4>Product Totals<span class="text-primary"><b>$ {{ total }}</b></span></h4></a></li>
+                                {% for o in orders %}
+                                    <li><a href="#" style="font-size: 12px;">{{ o.item.title }}<span class="last text-success"><b>${{ o.get_total_price }}</b></span></a></li>
+                                {% endfor %}
+                            </ul>
+                            <div class="text-center">
+                            <a class="button button-paypal" href="{% url 'request' %}">Proceed to ZarrinPal</a>
                             </div>
-                            <p>Please send a check to Store Name, Store Street, Store Town, Store State / County,
-                                Store Postcode.</p>
-                        </div>
-                        <div class="payment_item active">
-                            <div class="radion_btn">
-                                <input type="radio" id="f-option6" name="selector">
-                                <label for="f-option6">Paypal </label>
-                                <img src="{% static 'img/product/card.jpg' %}" alt="">
-                                <div class="check"></div>
-                            </div>
-                            <p>Pay via PayPal; you can pay with your credit card if you don’t have a PayPal
-                                account.</p>
-                        </div>
-                        <div class="creat_account">
-                            <input type="checkbox" id="f-option4" name="selector">
-                            <label for="f-option4">I’ve read and accept the </label>
-                            <a href="#">terms & conditions*</a>
-                        </div> -->
-                        <div class="text-center">
-                          <a class="button button-paypal" href="{% url 'request' %}">Proceed to ZarrinPal</a>
                         </div>
                     </div>
-                </div>
-
+                {% endif %}
             </div>
         </div>
     </section>
