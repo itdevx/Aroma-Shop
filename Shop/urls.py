@@ -27,7 +27,7 @@ urlpatterns = [
     path('', include('blog.urls')),
 
     path('request/', views.send_request, name='request'),
-    path('verify/', views.verify , name='verify'),
+    path('verify/<order_id>', views.verify , name='verify'),
 ]
 
 

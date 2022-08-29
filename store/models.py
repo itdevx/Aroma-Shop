@@ -37,12 +37,13 @@ class Order(models.Model):
         amount = 0
         for detail in self.orderdetail_set.all():
             amount += detail.price * detail.count
+        return amount
 
 
 class OrderDetail(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, blank=True, null=True)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    price = models.FloatField()
+    price = models.IntegerField()
     count = models.IntegerField()
 
     @property
