@@ -7,7 +7,8 @@ from store.models import Order
 from store.models import Item as Product
 from store import forms
 from django.contrib.auth.decorators import login_required
-
+import datetime
+from django.db.models import Count
 # zarinpall
 from django.http import Http404, HttpResponse
 from django.shortcuts import redirect
@@ -109,9 +110,16 @@ class CartView(View):
 class ShopView(View):
     def get(self, request):
         items = Product.objects.filter(active=True)
+
+        days = datetime.datetime.today() - datetime.timedelta(days=7)
+
+        top_product = Product.objects.filter(orderdetail__date_added__lte=datetime.datetime.today(), orderdetail__date_added__gt=days).annotate(count=Count('orderdetail__count')).order_by('-count')[:8]
+        print(top_product)
+
         c = {
             'details': None,
-            'items': items
+            'items': items,
+            'top_product': top_product
         }
 
         open_order: Order = Order.objects.filter(owner_id=request.user.id, is_paid=False).first()

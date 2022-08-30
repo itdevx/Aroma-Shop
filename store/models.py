@@ -44,6 +44,7 @@ class OrderDetail(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     price = models.IntegerField()
     count = models.IntegerField()
+    date_added = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
     @property
     def get_total_price(self):

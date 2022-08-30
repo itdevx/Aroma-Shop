@@ -15,4 +15,4 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(OrderDetail)
 class OrderDetailAdmin(admin.ModelAdmin):
-    list_display = ['item', 'price', 'count']
+    list_display = ['item', 'price', 'count', 'date_added']
