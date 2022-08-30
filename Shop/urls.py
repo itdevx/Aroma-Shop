@@ -24,7 +24,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('store.urls')),
     path('', include('account.urls')),
-    path('', include('blog.urls')),
 
     path('request/', views.send_request, name='request'),
     path('verify/<order_id>', views.verify , name='verify'),
