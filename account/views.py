@@ -2,12 +2,15 @@ from django.shortcuts import redirect, render
 from django.views.generic import View
 from django.views import generic
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from account import forms
 from store import models
 
 
-class Dashboard(generic.View):
+
+class Dashboard(LoginRequiredMixin, generic.View):
+    login_url = 'account:login'
     def get(self, request):
 
         items = models.Item.objects.all().order_by('-id')[:10]

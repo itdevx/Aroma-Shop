@@ -1,6 +1,9 @@
 {% extends 'base-dashboard.html' %}
 {% load static %}
 
+{% block title %}
+Dashboard | {{ request.user }}
+{% endblock %}
 
 {% block body %}
     <div class="preloader">
@@ -134,16 +137,9 @@
                                     <div>
                                         <h5 class="card-title">Product Overview</h5>
                                     </div>
-                                    <div class="ml-auto">
-                                        <select class="custom-select b-0">
-                                            <option>January</option>
-                                            <option value="1">February</option>
-                                            <option value="2" selected="">March</option>
-                                            <option value="3">April</option>
-                                        </select>
-                                    </div>
                                 </div>
                             </div>
+                            {% if request.user.is_superuser %}
                             <div class="table-responsive">
                                 <table class="table table-hover">
                                     <thead>
@@ -162,7 +158,7 @@
                                             <td class="text-center">{{ i.id }}</td>
                                             <td class="txt-oflo"><b>{{ i.title }}</b></td>
                                             <td class="txt-oflo"><img src="{{ i.image.url }}" width="100" alt=""></td>
-                                            <td><span class="text-success"><b>${{ i.price }}</b></span></td>
+                                            <td><span class="text-primary"><b>${{ i.price }}</b></span></td>
                                             <td class="txt-oflo">{% if i.mojodi == True %} <i class="fas fa-check-circle text-success"></i> {% else %} <i class="fas fa-minus-circle text-danger"></i> {% endif %}</td>
                                             <td class="txt-oflo">{% if i.active == True %} <i class="fas fa-check-circle text-success"></i> {% else %} <i class="fas fa-minus-circle text-danger"></i> {% endif %}</td>
                                         </tr>
@@ -170,6 +166,7 @@
                                     </tbody>
                                 </table>
                             </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
