@@ -21,7 +21,7 @@ class IndexView(View):
     def get(self, request):
         c = {
             'details': None,
-            'products': Product.objects.filter(active=True)
+            'products': Product.objects.filter(active=True).order_by('-id')[:4]
         }
 
         open_order: Order = Order.objects.filter(owner_id=request.user.id, is_paid=False).first()
@@ -29,12 +29,6 @@ class IndexView(View):
             c['details'] = open_order.orderdetail_set.all()
 
         return render(request, 'index.html', c)
-
-
-# class IndexView(ListView):
-#     template_name = 'index.html'
-#     queryset = Product.objects.filter(active=True)
-#     context_object_name = 'products'
 
 
 class SingleProduct(View):
