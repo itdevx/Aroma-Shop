@@ -4,6 +4,20 @@ from django.views import generic
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
 from account import forms
+from store import models
+
+
+class Dashboard(generic.View):
+    def get(self, request):
+
+        items = models.Item.objects.all().order_by('-id')[:10]
+        c = {
+            'items': items
+        }
+
+        return render(request, 'dashboard.html', c) 
+
+
 
 
 class LoginView(View):
@@ -50,12 +64,6 @@ class RegisterView(generic.CreateView):
         user = form.save()
         login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
         return redirect('store:index')
-
-
-class Dashboard(generic.View):
-    def get(self, request):
-
-        return render(request, 'dashboard.html') 
 
 
 # User = get_user_model()
