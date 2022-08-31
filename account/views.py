@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from account import forms
 from store import models
+from django.contrib.auth.models import User
 
 
 
@@ -21,6 +22,15 @@ class Dashboard(LoginRequiredMixin, generic.View):
         return render(request, 'dashboard.html', c) 
 
 
+class DashboardProfile(generic.View):
+    def get(self, request):
+        user = User.objects.filter(username=request.user.username).first()
+        
+        c = {
+            'user': user
+        }
+
+        return render(request, 'profile.html', c)
 
 
 class LoginView(View):
