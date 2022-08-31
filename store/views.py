@@ -19,9 +19,12 @@ from zeep import Client
 
 class IndexView(View):
     def get(self, request):
+        days = datetime.datetime.today() - datetime.timedelta(days=7)
+
         c = {
             'details': None,
-            'products': Product.objects.filter(active=True).order_by('-id')[:4]
+            'products': Product.objects.filter(active=True).order_by('-id')[:4],
+            'best_product': Product.objects.filter(orderdetail__date_added__lte=datetime.datetime.today(), orderdetail__date_added__gt=days).annotate(count=Count('orderdetail__count')).order_by('-count')[:5]
         }
 
         open_order: Order = Order.objects.filter(owner_id=request.user.id, is_paid=False).first()
@@ -104,11 +107,8 @@ class CartView(View):
 class ShopView(View):
     def get(self, request):
         items = Product.objects.filter(active=True)
-
         days = datetime.datetime.today() - datetime.timedelta(days=7)
-
         top_product = Product.objects.filter(orderdetail__date_added__lte=datetime.datetime.today(), orderdetail__date_added__gt=days).annotate(count=Count('orderdetail__count')).order_by('-count')[:8]
-        print(top_product)
 
         c = {
             'details': None,
