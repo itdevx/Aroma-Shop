@@ -51,7 +51,13 @@ class RegisterView(generic.CreateView):
         login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
         return redirect('store:index')
 
-        
+
+class Dashboard(generic.View):
+    def get(self, request):
+
+        return render(request, 'dashboard.html') 
+
+
 # User = get_user_model()
 # class RegisterView(View):
 #     template_name = 'register.html'
