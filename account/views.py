@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import redirect, render
 from django.views.generic import View
 from django.views import generic
@@ -31,6 +32,23 @@ class DashboardProfile(generic.View):
         }
 
         return render(request, 'profile.html', c)
+
+
+class AllUser(generic.View):
+    def get(self, request):
+        if request.user.is_superuser:
+
+            users = User.objects.all()
+
+            c = {
+                'users': users
+            }
+            return render(request, 'all-users.html', c)
+
+        else:
+            raise Http404()
+
+
 
 
 class LoginView(View):
