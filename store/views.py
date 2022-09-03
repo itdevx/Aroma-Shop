@@ -116,7 +116,8 @@ class ShopView(View):
             'details': None,
             'items': items,
             'top_product': top_product,
-            'category': models.Category.objects.all()
+            'category': models.Category.objects.all().annotate(items_count=Count('item'))
+
         }
 
         open_order: Order = Order.objects.filter(owner_id=request.user.id, is_paid=False).first()
