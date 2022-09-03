@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import View, ListView
 from store.models import OrderDetail
 from store.models import Order
+from store import models
 from store.models import Item as Product
 from store import forms
 from django.contrib.auth.decorators import login_required
@@ -104,7 +105,8 @@ class CartView(View):
         return render(request, 'cart.html', c)
 
     
-class ShopView(View):
+class ShopView(View):    
+
     def get(self, request):
         items = Product.objects.filter(active=True)
         days = datetime.datetime.today() - datetime.timedelta(days=7)
@@ -113,7 +115,8 @@ class ShopView(View):
         c = {
             'details': None,
             'items': items,
-            'top_product': top_product
+            'top_product': top_product,
+            'category': models.Category.objects.all()
         }
 
         open_order: Order = Order.objects.filter(owner_id=request.user.id, is_paid=False).first()
@@ -121,6 +124,24 @@ class ShopView(View):
             c['details'] = open_order.orderdetail_set.all()
 
         return render(request, 'shop.html', c)
+
+
+class Category(ListView):
+    template_name = 'shop.html'
+    context_object_name = 'items'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # context['category'] = models.Category.objects.all(),
+        context['category'] = models.Category.objects.all().annotate(items_count=Count('item'))
+        return context
+
+    def get_queryset(self):
+        category_slug = self.kwargs['category_slug']
+        category = models.Category.objects.filter(category_name__iexact=category_slug).first()
+        if category is None:
+            pass
+        return Product.objects.get_queryset().filter(categories__category_slug__iexact=category_slug, active=True)
 
 
 class CheckoutView(View):

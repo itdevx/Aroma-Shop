@@ -1,8 +1,9 @@
 from django.contrib import admin
-from store.models import Item as Product, Order, OrderDetail
+from store.models import Item as Product, Order, OrderDetail, Category
 
 
 admin.site.register(Order)
+admin.site.register(Category)
 
 
 @admin.register(Product)

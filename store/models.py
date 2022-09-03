@@ -3,16 +3,30 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 
 
+class Manager(models.Manager):
+    def get_product_by_category(self, category_slug):
+        return self.get_queryset().filter(categories__category_slug__iexact=category_slug, actice=True)
+
+
+class Category(models.Model):
+    category_name = models.CharField(max_length=100)
+    category_slug = models.SlugField(max_length=100)
+
+    def __str__(self):
+        return self.category_name
+
+
 class Item(models.Model):
     title = models.CharField(max_length=150)
     slug = models.SlugField()
     price = models.FloatField()
-    # categories = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True)
+    categories = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True)
     mojodi = models.BooleanField(default=True)   
     image = models.ImageField(upload_to='Product Image', blank=True, null=True)
     text = models.TextField()
     description = models.TextField()
     active = models.BooleanField(default=False)
+    objects = Manager()
 
     def __str__(self):
         return self.title
